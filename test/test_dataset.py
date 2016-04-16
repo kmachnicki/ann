@@ -15,16 +15,17 @@ class TestDataSet(TestCase):
         self.assertListEqual(self.expected_extracted_features, self.dataSet.X)
         self.assertListEqual(self.expected_extracted_classes, self.dataSet.y)
 
-    def test_init(self):
+    def test_should_initialize_properly(self):
         self.assertListEqual(self.init_features, self.dataSet.X)
         self.assertListEqual(self.init_classes, self.dataSet.y)
 
-    def test_extract_from_csv_with_header(self):
+    def test_should_extract_features_and_classes_from_csv_with_header(self):
         with open("mock_data_set_with_header.csv") as csv_file:
             self.dataSet.extract_from_csv(csv_file)
         self.check_extracted()
 
-    def test_extract_from_csv_without_header(self):
+    def test_test_should_extract_features_and_classes_from_csv_without_header(self):
         with open("mock_data_set_without_header.csv") as csv_file:
             self.dataSet.extract_from_csv(csv_file)
         self.check_extracted()
+        
