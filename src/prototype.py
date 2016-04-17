@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split, cross_val_predict, cross_val_score
 import random
 from src.dataset import DataSet
 
@@ -47,16 +48,10 @@ def main():
     with open("../stopien_zlosliwosci.csv", "r", newline='', encoding="utf8") as csv_file:
         ds.extract_from_csv(csv_file)
 
-    clf = MLPClassifier(algorithm='l-bfgs', max_iter=1000, alpha=1e-6, hidden_layer_sizes=(1500), random_state=1)
-    classifier = clf.fit(ds.X, ds.y)
-
-    test_1, test_2, test_3 = create_test_data()
-
-    check_results(test_1, classifier.predict(test_1), 1)
-    check_results(test_2, classifier.predict(test_2), 2)
-    check_results(test_3, classifier.predict(test_3), 3)
-
-    print("Done.")
+    # X_train, X_test, y_train, y_test = train_test_split(ds.X, ds.y, test_size=0.3, random_state=1)
+    clf = MLPClassifier(algorithm='l-bfgs', max_iter=50, alpha=1e-6, hidden_layer_sizes=10000, random_state=1)
+    # classifier = clf.fit(X_train, y_train)
+    print(cross_val_score(clf, ds.X, ds.y, cv=10, n_jobs=-1))
 
 if __name__ == '__main__':
     main()
