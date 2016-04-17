@@ -31,6 +31,10 @@ class TestDataSet(TestCase):
 
     def test_should_raise_error_on_feature_size_mismatch(self):
         with self.assertRaises(RuntimeError):
+            DataSet(X=[[1], [1, 2]])
+        with self.assertRaises(RuntimeError):
+            DataSet(y=[1])
+        with self.assertRaises(RuntimeError):
             DataSet(X=[[1], [1, 2]], y=[1])
         with open("mock_data_set_corrupted.csv") as csv_file:
             with self.assertRaises(RuntimeError):

@@ -4,8 +4,8 @@ import csv
 
 class DataSet:
     def __init__(self, X=None, y=None):
-        self._X = X if X else ()
-        self._y = y if y else ()
+        self._X = X
+        self._y = y
         self._check_features_sizes()
 
     def extract_from_csv(self, csv_file):
@@ -18,6 +18,7 @@ class DataSet:
             self._X.append(extracted_features)
             extracted_class = int(row[-1])
             self._y.append(extracted_class)
+
         self._check_features_sizes()
         return self._X, self._y
 
@@ -41,8 +42,11 @@ class DataSet:
         return len(self.X[0])
 
     def _check_features_sizes(self):
-        prev_len = len(self.X[0])
-        for features in self.X[1:]:
-            if len(features) != prev_len:
-                raise RuntimeError("Rows sizes mismatch. Check your csv file.")
-            prev_len = len(features)
+        if self.X and self.y:
+            prev_len = len(self.X[0])
+            for features in self.X[1:]:
+                if len(features) != prev_len:
+                    raise RuntimeError("Rows sizes mismatch. Check your csv file.")
+                prev_len = len(features)
+        elif any([self.X, self.y]):
+            raise RuntimeError("Bad init")
