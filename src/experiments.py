@@ -2,6 +2,18 @@
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import cross_val_score
+from sklearn.feature_selection import SelectKBest
+
+
+def select_features(X_train, y_train, k_best_features=10, threshold=(.8 * (1 - .8))):
+    return SelectKBest(k=k_best_features).fit_transform(X_train, y_train)
+
+
+def run_experiments_for_five_numbers_of_neurons(X_train, y, algorithm='l-bfgs', max_iter=100, alpha=1e-6,
+                                                hidden_layer_sizes=100, cv=10, n_jobs=-1):
+    for layer_size in range(50, 550, 100):
+        print("Running experiment for layer_size =", layer_size)
+        run_experiment(X_train, y, algorithm='l-bfgs', max_iter=100, alpha=1e-5, hidden_layer_sizes=layer_size)
 
 
 def run_experiment(X_train, y, algorithm='l-bfgs', max_iter=100, alpha=1e-6, hidden_layer_sizes=100, cv=10, n_jobs=-1):
