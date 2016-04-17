@@ -10,11 +10,11 @@ def select_features(X_train, y_train, k_best_features=10):
 
 
 def run_experiments_for_five_numbers_of_neurons(X_train, y, algorithm='l-bfgs', max_iter=100, alpha=1e-6,
-                                                hidden_layer_size=100, cv=10, n_jobs=-1):
+                                                cv=10, n_jobs=-1):
     for layer_size in range(50, 550, 100):
         print("Running experiment for layer_size =", layer_size)
         run_experiment(X_train, y, algorithm=algorithm, max_iter=max_iter, alpha=alpha,
-                       hidden_layer_size=hidden_layer_size, cv=cv, n_jobs=n_jobs)
+                       hidden_layer_size=layer_size, cv=cv, n_jobs=n_jobs)
 
 
 def run_experiment(X_train, y, algorithm='l-bfgs', max_iter=100, alpha=1e-6, hidden_layer_size=100, cv=10, n_jobs=-1):
