@@ -20,12 +20,12 @@ class TestDataSet(TestCase):
         self.assertListEqual(self.init_classes, self.dataSet.y)
 
     def test_should_extract_features_and_classes_from_csv_with_header(self):
-        with open("mock_data_set_with_header.csv") as csv_file:
+        with open("data_sets/mock_data_set_with_header.csv") as csv_file:
             self.dataSet.extract_from_csv(csv_file)
         self.check_extracted()
 
     def test_should_extract_features_and_classes_from_csv_without_header(self):
-        with open("mock_data_set_without_header.csv") as csv_file:
+        with open("data_sets/mock_data_set_without_header.csv") as csv_file:
             self.dataSet.extract_from_csv(csv_file)
         self.check_extracted()
 
@@ -36,7 +36,7 @@ class TestDataSet(TestCase):
             DataSet(y=[1])
         with self.assertRaises(RuntimeError):
             DataSet(X=[[1], [1, 2]], y=[1])
-        with open("mock_data_set_corrupted.csv") as csv_file:
+        with open("data_sets/mock_data_set_corrupted.csv") as csv_file:
             with self.assertRaises(RuntimeError):
                 self.dataSet.extract_from_csv(csv_file)
 
