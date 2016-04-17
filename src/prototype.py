@@ -4,6 +4,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split, cross_val_predict, cross_val_score
 import random
 from src.dataset import DataSet
+from src.consts import INPUT_DATA_FILE
 
 
 def check_results(training_set, output, correct_answer):
@@ -45,7 +46,7 @@ def create_test_data():
 
 def main():
     ds = DataSet()
-    with open("../stopien_zlosliwosci.csv", "r", newline='', encoding="utf8") as csv_file:
+    with open(INPUT_DATA_FILE, "r", newline='', encoding="utf8") as csv_file:
         ds.extract_from_csv(csv_file)
 
     # X_train, X_test, y_train, y_test = train_test_split(ds.X, ds.y, test_size=0.3, random_state=1)

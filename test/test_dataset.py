@@ -3,6 +3,8 @@ from os import path
 from unittest import TestCase
 from src.dataset import DataSet
 
+DATA_SETS_DIR = path.join(path.dirname(__file__), "data_sets")
+
 
 class TestDataSet(TestCase):
     def setUp(self):
@@ -29,7 +31,7 @@ class TestDataSet(TestCase):
         self.assertListEqual(self.init_cases, self.data_set.cases)
 
     def test_should_extract_features_and_classes_from_csv_with_header(self):
-        with open(path.join(self.data_set_dir, "mock_data_set_with_header.csv"),
+        with open(path.join(DATA_SETS_DIR, "mock_data_set_with_header.csv"),
                   "r", newline='', encoding="utf8") as csv_file:
             self.data_set.extract_from_csv(csv_file)
         self.check_extracted()
@@ -41,7 +43,7 @@ class TestDataSet(TestCase):
             DataSet(y=[1])
         with self.assertRaises(RuntimeError):
             DataSet(X=[[1], [1, 2]], y=[1])
-        with open(path.join(self.data_set_dir, "mock_data_set_corrupted.csv"),
+        with open(path.join(DATA_SETS_DIR, "mock_data_set_corrupted.csv"),
                   "r", newline='', encoding="utf8") as csv_file:
             with self.assertRaises(RuntimeError):
                 self.data_set.extract_from_csv(csv_file)
