@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from csv import reader, Sniffer
+from csv import reader
 
 
 class DataSet:
