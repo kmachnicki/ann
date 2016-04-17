@@ -44,7 +44,7 @@ def create_test_data():
 
 def main():
     ds = DataSet()
-    with open("../stopien_zlosliwosci.csv", newline='') as csv_file:
+    with open("../stopien_zlosliwosci.csv", "r", newline='', encoding="utf8") as csv_file:
         ds.extract_from_csv(csv_file)
 
     clf = MLPClassifier(algorithm='l-bfgs', max_iter=1000, alpha=1e-6, hidden_layer_sizes=(1500), random_state=1)
