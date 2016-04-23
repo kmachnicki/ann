@@ -9,8 +9,9 @@ def main():
     ds = DataSet()
     with open(INPUT_DATA_FILE, "r", newline='', encoding="utf8") as csv_file:
         ds.extract_from_csv(csv_file)
-    run_experiments_for_five_numbers_of_neurons(ds.X, ds.y, algorithm='l-bfgs', max_iter=150,
-                                                alpha=1e-5, n_features=2, min_layer_size=100)
+    print("Ranking", ds.create_features_ranking(use_names=False))
+    run_experiments_for_five_numbers_of_neurons(ds.X, ds.y, algorithm='sgd', max_iter=1000,
+                                                alpha=1e-6, learning_rate='adaptive', n_features=10)
 
 if __name__ == '__main__':
     main()
