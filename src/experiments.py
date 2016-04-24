@@ -3,6 +3,7 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.feature_selection import SelectKBest
+from src.consts import RANDOM_STATE
 
 
 def select_features(X_train, y_train, k_best_features='all'):
@@ -16,6 +17,10 @@ def run_experiments_for_five_numbers_of_neurons(X_train, y, algorithm='sgd', max
                                                 n_features='all', cv=10, n_jobs=-1,
                                                 min_layer_size=None, max_layer_size=None):
     print("Running experiments.")
+    if RANDOM_STATE:
+        print("Use predefined random_state: True ({})".format(RANDOM_STATE))
+    else:
+        print("Use predefined random_state: False")
     print("Parameters: algorithm={}, max_iter={}, alpha={}, n_features={}, cv={}".format(algorithm, max_iter, alpha,
                                                                                          n_features, cv))
     X_selected = select_features(X_train, y, n_features)
@@ -25,11 +30,7 @@ def run_experiments_for_five_numbers_of_neurons(X_train, y, algorithm='sgd', max
     else:
         print("Using {} selected features.".format(n_features))
 
-    if min_layer_size and not max_layer_size:
-        max_layer_size = min_layer_size * 5
-    elif not min_layer_size and not max_layer_size:
-        min_layer_size = num_of_selected_features
-        max_layer_size = min_layer_size * 5
+    max_layer_size, min_layer_size = calc_layer_size(max_layer_size, min_layer_size, num_of_selected_features)
 
     best = (0, 0, 0)
     for layer_size in range(min_layer_size, max_layer_size,
@@ -38,11 +39,23 @@ def run_experiments_for_five_numbers_of_neurons(X_train, y, algorithm='sgd', max
         scores = run_experiment(X_selected, y, algorithm=algorithm, max_iter=max_iter, alpha=alpha,
                                 learning_rate=learning_rate, hidden_layer_size=layer_size, cv=cv, n_jobs=n_jobs)
 
-        if scores.mean() - scores.std() * 2 > best[0]:
+        print("{} vs {}".format(scores.mean() - scores.std() * 2, best[0] - best[1]))
+        if scores.mean() - scores.std() * 2 > best[0] - best[1]:
             best = (scores.mean(), scores.std() * 2, layer_size)
+            print("new best", best)
         print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
         print()
-    print("Best: ", best)
+    print("Best (mean, std, layer_size): ", best)
+    return best
+
+
+def calc_layer_size(max_layer_size, min_layer_size, num_of_selected_features):
+    if min_layer_size and not max_layer_size:
+        max_layer_size = min_layer_size * 5
+    elif not min_layer_size and not max_layer_size:
+        min_layer_size = num_of_selected_features
+        max_layer_size = min_layer_size * 5
+    return max_layer_size, min_layer_size
 
 
 def run_experiment(X_train, y, algorithm='sgd', max_iter=100, alpha=1e-6, hidden_layer_size=100,
@@ -66,5 +79,5 @@ def run_experiment(X_train, y, algorithm='sgd', max_iter=100, alpha=1e-6, hidden
     """
 
     clf = MLPClassifier(algorithm=algorithm, max_iter=max_iter, alpha=alpha, hidden_layer_sizes=hidden_layer_size,
-                        learning_rate=learning_rate, random_state=1)
+                        learning_rate=learning_rate, random_state=RANDOM_STATE)
     return cross_val_score(clf, X_train, y, cv=cv, n_jobs=n_jobs)

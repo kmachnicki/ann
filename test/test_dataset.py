@@ -37,14 +37,19 @@ class TestDataSet(TestCase):
         self.check_extracted()
 
     def test_should_raise_error_on_feature_size_mismatch(self):
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(RuntimeError) as cm:
             DataSet(X=[[1], [1, 2]])
+        self.assertEqual("dupa", cm.exception)
         with self.assertRaises(RuntimeError):
             DataSet(y=[1])
         with self.assertRaises(RuntimeError):
             DataSet(X=[[1], [1, 2]], y=[1])
         with self.assertRaises(RuntimeError):
             DataSet(X=[[1], [1, 2]], y=[1, 1])
+        with self.assertRaises(RuntimeError):
+            DataSet(X=[[1], [1, 2]], y=[1, 1, 1])
+        with self.assertRaises(RuntimeError):
+            DataSet(col_names=["a"])
         with self.assertRaises(RuntimeError):
             DataSet(X=[[1, 2], [1, 2]], y=[1, 1], col_names=["a"])
         with open(path.join(DATA_SETS_DIR, "mock_data_set_corrupted.csv"),
