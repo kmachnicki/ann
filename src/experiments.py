@@ -33,18 +33,19 @@ def run_experiments_for_five_numbers_of_neurons(X_train, y, algorithm='sgd', max
     max_layer_size, min_layer_size = calc_layer_size(max_layer_size, min_layer_size, num_of_selected_features)
 
     best = (0, 0, 0)
-    for layer_size in range(min_layer_size, max_layer_size,
-                            int((max_layer_size - min_layer_size) / 5)):
-        print("layer_size =", layer_size)
-        scores = run_experiment(X_selected, y, algorithm=algorithm, max_iter=max_iter, alpha=alpha,
-                                learning_rate=learning_rate, hidden_layer_size=layer_size, cv=cv, n_jobs=n_jobs)
+    # for layer_size in range(min_layer_size, max_layer_size,
+    #                         int((max_layer_size - min_layer_size) / 5)):
+    layer_size=5
+    print("layer_size =", layer_size)
+    scores = run_experiment(X_selected, y, algorithm=algorithm, max_iter=max_iter, alpha=alpha,
+                            learning_rate=learning_rate, hidden_layer_size=layer_size, cv=cv, n_jobs=n_jobs)
 
-        print("{} vs {}".format(scores.mean() - scores.std() * 2, best[0] - best[1]))
-        if scores.mean() - scores.std() * 2 > best[0] - best[1]:
-            best = (scores.mean(), scores.std() * 2, layer_size)
-            print("new best", best)
-        print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-        print()
+    print("{} vs {}".format(scores.mean() - scores.std() * 2, best[0] - best[1]))
+    if scores.mean() - scores.std() * 2 > best[0] - best[1]:
+        best = (scores.mean(), scores.std() * 2, layer_size)
+        print("new best", best)
+    print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
+    print()
     print("Best (mean, std, layer_size): ", best)
     return best
 

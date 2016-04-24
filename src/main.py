@@ -11,11 +11,11 @@ def main():
         ds.extract_from_csv(csv_file)
     print("Ranking (descending)", ds.create_features_ranking(use_names=True))
     results = {}
-    for n_features in range(5, 35, 5):
-        results[n_features] =  run_experiments_for_five_numbers_of_neurons(ds.X, ds.y, algorithm='sgd', max_iter=1000,
+    for n_features in range(2, ds.number_of_features, 1):
+        results[n_features] =  run_experiments_for_five_numbers_of_neurons(ds.X, ds.y, algorithm='sgd', max_iter=10000,
                                                 alpha=1e-6, learning_rate='adaptive', n_features=n_features)
-    for n_features, score in results.items():
-        print("Score (mean, std, layer_size) for {} features = {}".format(n_features, score))
+    for n_features, score in sorted(results.items()):
+        print("Score (mean, std, layer_size) for {} features = {}, {}".format(n_features, score, score[0] - score[1]))
 
 if __name__ == '__main__':
     main()
