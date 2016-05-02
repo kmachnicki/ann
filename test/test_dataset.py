@@ -39,7 +39,6 @@ class TestDataSet(TestCase):
     def test_should_raise_error_on_feature_size_mismatch(self):
         with self.assertRaises(RuntimeError) as cm:
             DataSet(X=[[1], [1, 2]])
-        self.assertEqual("dupa", cm.exception)
         with self.assertRaises(RuntimeError):
             DataSet(y=[1])
         with self.assertRaises(RuntimeError):
