@@ -6,11 +6,12 @@ from src.consts import INPUT_DATA_FILE
 import matplotlib.pyplot as plt
 from collections import Counter
 
-
 def main():
     ds = DataSet()
     with open(INPUT_DATA_FILE, "r", newline='', encoding="utf8") as csv_file:
         ds.extract_from_csv(csv_file)
+
+    run_elm(ds.X, ds.y)
 
     print("Ranking (descending)", ds.create_features_ranking(use_names=True))
     results = {}
