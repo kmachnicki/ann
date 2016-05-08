@@ -10,21 +10,24 @@ import elm
 
 
 def run_elm(X, y):
+    '''
+    Extreme learning machine algorithm for the single layer feedworward network (SLFN)
+    '''
     data = np.column_stack((X, y))
     elmk = elm.ELMKernel()
     elmk.search_param(data, cv="kfold", of="accuracy", eval=10)
-    tr_set, te_set = elm.split_sets(data, training_percent=.8, perm=True)
-    tr_result = elmk.train(tr_set)
-    te_result = elmk.test(te_set)
-    print(te_result.get_accuracy)
-
-def get_selected_features_indices(X, y, k_best_features='all'):
-    return SelectKBest(k=k_best_features).fit(X, y).get_support(indices=True)
+    train_set, test_set = elm.split_sets(data, training_percent=.8, perm=True)
+    train_result = elmk.train(train_set)
+    test_result = elmk.test(test_set)
+    print(test_result.get_accuracy)
 
 
 # sgd = stochastic gradient descent
-def run_experiment(X, y, algorithm='sgd', max_iter=100, alpha=1e-6,
+def run_bp(X, y, algorithm='sgd', max_iter=100, alpha=1e-6,
                    learning_rate='constant', n_features='all', hidden_layer_size=100, kfold=10):
+    '''
+    Back propagation algorithm for the single layer feedworward network (SLFN)
+    '''
     X = np.array(X)
     y = np.array(y)
     mean = 0
@@ -38,6 +41,10 @@ def run_experiment(X, y, algorithm='sgd', max_iter=100, alpha=1e-6,
         mean += calculate_score(X_train, y_train, X_test, y_test, algorithm=algorithm, max_iter=max_iter, alpha=alpha,
                                 learning_rate=learning_rate, hidden_layer_size=hidden_layer_size)
     return mean / kfold, counter
+
+
+def get_selected_features_indices(X, y, k_best_features='all'):
+    return SelectKBest(k=k_best_features).fit(X, y).get_support(indices=True)
 
 
 def calculate_score(X_train, y_train, x_test, y_test, algorithm='sgd', max_iter=200, alpha=1e-6, hidden_layer_size=100,
