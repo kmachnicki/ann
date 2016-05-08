@@ -9,6 +9,15 @@ from collections import Counter
 import elm
 
 
+def run_elm(X, y):
+    data = np.column_stack((X, y))
+    elmk = elm.ELMKernel()
+    elmk.search_param(data, cv="kfold", of="accuracy", eval=10)
+    tr_set, te_set = elm.split_sets(data, training_percent=.8, perm=True)
+    tr_result = elmk.train(tr_set)
+    te_result = elmk.test(te_set)
+    print(te_result.get_accuracy)
+
 def get_selected_features_indices(X, y, k_best_features='all'):
     return SelectKBest(k=k_best_features).fit(X, y).get_support(indices=True)
 

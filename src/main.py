@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from src.experiments import run_experiment
+from src.experiments import run_experiment, run_elm
 from src.dataset import DataSet
 from src.consts import INPUT_DATA_FILE
 import matplotlib.pyplot as plt
@@ -11,6 +11,9 @@ def main():
     with open(INPUT_DATA_FILE, "r", newline='', encoding="utf8") as csv_file:
         ds.extract_from_csv(csv_file)
 
+    run_elm(ds.X, ds.y)
+
+    '''
     print("Ranking (descending)", ds.create_features_ranking(use_names=True))
     results = {}
     final_counter = Counter()
@@ -29,6 +32,7 @@ def main():
     x = range(1, ds.number_of_features, 1)
     plt.plot(x, y)
     plt.show()
+    '''
 
 if __name__ == '__main__':
     main()
