@@ -11,8 +11,6 @@ def main():
     with open(INPUT_DATA_FILE, "r", newline='', encoding="utf8") as csv_file:
         ds.extract_from_csv(csv_file)
 
-    run_elm(ds.X, ds.y)
-
     print("Ranking (descending)", ds.create_features_ranking(use_names=True))
     results = {}
     final_counter = Counter()

@@ -6,16 +6,8 @@ from src.consts import RANDOM_STATE
 from sklearn.model_selection import KFold
 import numpy as np
 from collections import Counter
-from hpelm import ELM
+import elm
 
-
-def run_elm(X, T):
-    elm = ELM(inputs=len(X), outputs=len(T), classification="c")
-    elm.add_neurons(number=10, func="sigm")
-    print(elm.nnet.get_B())
-    elm.train(X, T, "CV")
-    Y = elm.predict(X)
-    print(Y)
 
 def get_selected_features_indices(X, y, k_best_features='all'):
     return SelectKBest(k=k_best_features).fit(X, y).get_support(indices=True)
