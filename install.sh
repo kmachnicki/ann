@@ -10,6 +10,6 @@ if ! [ -d "modules" ] ; then
 	mkdir "modules"
 fi
 
-git clone https://github.com/kmachnicki/Python-ELM modules/Python-ELM
+git clone https://github.com/kmachnicki/Python-ELM modules
 
 echo "***** All done, enjoy *****"

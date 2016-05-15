@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-from src.experiments import run_bp, run_elm
+from src.algorithm_bp import run_bp
+from src.algorithm_elm import run_elm
 from src.dataset import DataSet
 from src.consts import INPUT_DATA_FILE
 import matplotlib.pyplot as plt
@@ -17,7 +18,7 @@ def main():
     print("Ranking (descending)", ds.create_features_ranking(use_names=True))
     results_bp = {}
     results_elm = {}
-    hidden_layer_sizes = [100, 250, 500, 750, 1000]
+    hidden_layer_sizes = [5, 50]#[100, 250, 500, 750, 1000]
     final_counter_bp = Counter()
     for layer_size in hidden_layer_sizes:
         results_bp[layer_size] = {}

@@ -6,27 +6,13 @@ from src.consts import RANDOM_STATE
 from sklearn.model_selection import KFold
 import numpy as np
 from collections import Counter
-import elm
-
-
-def run_elm(X, y):
-    '''
-    Extreme learning machine algorithm for the single layer feedworward network (SLFN)
-    '''
-    data = np.column_stack((X, y))
-    elmk = elm.ELMKernel()
-    elmk.search_param(data, cv="kfold", of="accuracy", eval=10)
-    train_set, test_set = elm.split_sets(data, training_percent=.8, perm=True)
-    train_result = elmk.train(train_set)
-    test_result = elmk.test(test_set)
-    print(test_result.get_accuracy)
 
 
 # sgd = stochastic gradient descent
 def run_bp(X, y, algorithm='sgd', max_iter=100, alpha=1e-6,
                    learning_rate='constant', n_features='all', hidden_layer_size=100, kfold=10):
     '''
-    Back propagation algorithm for the single layer feedworward network (SLFN)
+    Back propagation algorithm for the single layer feedforward network (SLFN)
     '''
     X = np.array(X)
     y = np.array(y)
