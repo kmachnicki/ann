@@ -15,6 +15,17 @@ class Samples(object):
         self.fit_times = fit_times
         self.score_times = score_times
 
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            if key == "scores":
+                return self.scores
+            elif key == "fit_times":
+                return self.fit_times
+            elif key == "score_times":
+                return self.scores
+            else:
+                return None
+
 
 class ExperimentOutput(object):
     __slots__ = ["bp_samples", "elm_samples", "counter"]
@@ -23,6 +34,17 @@ class ExperimentOutput(object):
         self.bp_samples = bp_samples
         self.elm_samples = elm_samples
         self.counter = counter
+
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            if key == "bp":
+                return self.bp_samples
+            elif key == "elm":
+                return self.elm_samples
+            elif key == "counter":
+                return self.counter
+            else:
+                return None
 
 
 class ExperimentWrapper(object):
