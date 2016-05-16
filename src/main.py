@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
+from collections import Counter
+import numpy as np
+
 from src.algorithms import run_experiment
 from src.dataset import DataSet
 from src.consts import INPUT_DATA_FILE, HIDDEN_LAYER_SIZES
-import matplotlib.pyplot as plt
-from collections import Counter
-import numpy as np
+from src.grapher import generate_plots
 
 
 def main():
@@ -26,10 +27,9 @@ def main():
             final_counter.update(result.counter)
             print_result(result, layer_size, n_features)
 
-    print("Num of times features were selected: {}".format(final_counter))
+    print("\nNum of times features were selected: {}".format(final_counter))
 
-    #generate_plots(experiment_results, "bp", ds.number_of_features)
-    #generate_plots(experiment_results, "elm", ds.number_of_features)
+    generate_plots(experiment_results, ds.number_of_features)
 
 
 def print_result(result, layer_size, n_features):
@@ -53,27 +53,6 @@ def print_result(result, layer_size, n_features):
           .format(np.mean(result.elm_samples.fit_times),
                   np.mean(result.elm_samples.score_times)))
 
-
-def generate_plots(results, prefix, number_of_features):
-    x = range(1, number_of_features, 1)
-    for layer_size in HIDDEN_LAYER_SIZES:
-        y = []
-        for n_features, score in sorted(results[layer_size].items()):
-            y.append(score)
-        plt.figure(layer_size)
-        plt.plot(x, y)
-        if prefix == "bp":
-            plt.title("Back propagation, hidden layer size: " + str(layer_size))
-        else:
-            plt.title("Extreme learning machine, hidden layer size: " + str(layer_size))
-        plt.xlim(1.0, number_of_features)
-        plt.ylim(0.0, 1.0)
-        plt.xticks(x, rotation="vertical")
-        plt.yticks(np.arange(0.1, 1.0, 0.1))
-        plt.ylabel("Score")
-        plt.xlabel("Number of features")
-        plt.grid()
-        plt.savefig(prefix + "_" + str(layer_size) + ".png")
 
 if __name__ == '__main__':
     main()
