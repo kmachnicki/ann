@@ -9,45 +9,56 @@ from collections import Counter
 from time import time
 
 from modules.elm import ELMClassifier
-from src.consts import RANDOM_STATE, K_BEST_FEATURES, N_FOLDS, BP_ALGORITHM, BP_MAX_ITER, BP_ALPHA,\
+from src.consts import RANDOM_STATE, N_RUNS, K_BEST_FEATURES, N_FOLDS, BP_ALGORITHM, BP_MAX_ITER, BP_ALPHA,\
     BP_LEARNING_RATE, ELM_ACTIVATION_FUNC
-from src.helpers import AlgorithmOutput, ExperimentOutput
+from src.helpers import Sample, ExperimentOutput, ExperimentWrapper
 
 
 # sgd = stochastic gradient descent
-def run_experiment(X, y, hidden_layer_size, n_features, algorithm=BP_ALGORITHM, max_iter=BP_MAX_ITER, alpha=BP_ALPHA,
-                   learning_rate=BP_LEARNING_RATE, n_folds=N_FOLDS, activation_func=ELM_ACTIVATION_FUNC):
+def run_experiment(X, y, hidden_layer_size, n_features, n_runs=N_RUNS, algorithm=BP_ALGORITHM,
+                   max_iter=BP_MAX_ITER, alpha=BP_ALPHA, learning_rate=BP_LEARNING_RATE,
+                   n_folds=N_FOLDS, activation_func=ELM_ACTIVATION_FUNC):
     X = np.array(X)
     y = np.array(y)
 
     counter = Counter()
+    experiment_bp = ExperimentWrapper()
+    experiment_elm = ExperimentWrapper()
 
-    bp_scores, bp_fit_times, bp_score_times, elm_scores, elm_fit_times, elm_score_times = [], [], [], [], [], []
+    for i in range(n_runs):
+        kfolds_bp = ExperimentWrapper()
+        kfolds_elm = ExperimentWrapper()
 
-    for train_set, test_set in KFold(n_folds=n_folds).split(X, y):
-        X_train, X_test, y_train, y_test = X[train_set], X[test_set], y[train_set], y[test_set]
-        indices = get_selected_features_indices(X_train, y_train, k_best_features=n_features)
-        X_train = [row[indices] for row in X_train]
-        X_test = [row[indices] for row in X_test]
-        counter.update(indices)
+        for train_set, test_set in KFold(n_folds=n_folds).split(X, y):
+            X_train, X_test, y_train, y_test = X[train_set], X[test_set], y[train_set], y[test_set]
+            indices = get_selected_features_indices(X_train, y_train, k_best_features=n_features)
+            X_train = [row[indices] for row in X_train]
+            X_test = [row[indices] for row in X_test]
+            counter.update(indices)
 
-        bp_result = run_bp(X_train, y_train, X_test, y_test,
-                            algorithm=algorithm, max_iter=max_iter, alpha=alpha,
-                            learning_rate=learning_rate, hidden_layer_size=hidden_layer_size)
+            kfolds_bp.add_sample(
+                run_bp(X_train, y_train, X_test, y_test,
+                       algorithm=algorithm, max_iter=max_iter, alpha=alpha,
+                       learning_rate=learning_rate, hidden_layer_size=hidden_layer_size))
 
-        bp_scores.append(bp_result.score)
-        bp_fit_times.append(bp_result.fit_time)
-        bp_score_times.append(bp_result.score_time)
+            kfolds_elm.add_sample(
+                run_elm(X_train, y_train, X_test, y_test,
+                        n_hidden=hidden_layer_size, activation_func=activation_func))
 
-        elm_result = run_elm(X_train, y_train, X_test, y_test,
-                              n_hidden=hidden_layer_size, activation_func=activation_func)
+        kfolds_bp_samples = kfolds_bp.samples()
+        experiment_bp.add_sample(
+            Sample(np.mean(kfolds_bp_samples.scores),
+                   np.mean(kfolds_bp_samples.fit_times),
+                   np.mean(kfolds_bp_samples.score_times)))
 
-        elm_scores.append(elm_result.score)
-        elm_fit_times.append(elm_result.fit_time)
-        elm_score_times.append(elm_result.score_time)
+        kfolds_elm_samples = kfolds_elm.samples()
+        experiment_elm.add_sample(
+            Sample(np.mean(kfolds_elm_samples.scores),
+                   np.mean(kfolds_elm_samples.fit_times),
+                   np.mean(kfolds_elm_samples.score_times)))
 
-    return ExperimentOutput(AlgorithmOutput(np.mean(bp_scores), np.mean(bp_fit_times), np.mean(bp_score_times)),
-                            AlgorithmOutput(np.mean(elm_scores), np.mean(elm_fit_times), np.mean(elm_score_times)),
+    return ExperimentOutput(experiment_bp.samples(),
+                            experiment_elm.samples(),
                             counter)
 
 
@@ -72,7 +83,7 @@ def run_bp(X_train, y_train, X_test, y_test, algorithm, max_iter, alpha, hidden_
     score = clf.score(X_test, y_test)
     score_time = time() - score_start_time
 
-    return AlgorithmOutput(score, fit_time, score_time)
+    return Sample(score, fit_time, score_time)
 
 
 def run_elm(X_train, y_train, X_test, y_test, n_hidden, activation_func):
@@ -91,4 +102,4 @@ def run_elm(X_train, y_train, X_test, y_test, n_hidden, activation_func):
     score = elmc.score(X_test, y_test)
     score_time = time() - score_start_time
 
-    return AlgorithmOutput(score, fit_time, score_time)
+    return Sample(score, fit_time, score_time)
