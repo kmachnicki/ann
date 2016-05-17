@@ -18,22 +18,28 @@ def generate_plots(results, n_features):
 
 def draw(x, layer_size, results, n_features, alg_type, sample_type, ylabel):
     y = []
+    e = []
     for n_features, result in sorted(results[layer_size].items()):
         y.append(np.mean(result[alg_type][sample_type]))
-    plot(x, y, layer_size, n_features, alg_type, sample_type, ylabel)
+        e.append(np.std(result[alg_type][sample_type]))
+    plot(x, y, e, layer_size, n_features, alg_type, sample_type, ylabel)
 
 
-def plot(x, y, layer_size, n_features, alg_type, sample_type, ylabel):
+def plot(x, y, e, layer_size, n_features, alg_type, sample_type, ylabel):
     plt.figure(layer_size)
-    plt.plot(x, y)
+    plt.errorbar(x, y, yerr=e, fmt="bo--", ecolor="b", linewidth=1.0)
+
     if alg_type == "bp":
         plt.title("Back propagation, hidden layer size: " + str(layer_size))
     else:
         plt.title("Extreme learning machine, hidden layer size: " + str(layer_size))
+
+    if sample_type == "score":
+        plt.ylim(0.0, 1.0)
+        plt.yticks(np.arange(0.1, 1.0, 0.1))
+
     plt.xlim(1.0, n_features - 1)
-    #plt.ylim(0.0, 1.0)
     plt.xticks(x, rotation="vertical")
-    plt.yticks(np.arange(0.1, 1.0, 0.1))
     plt.ylabel(ylabel)
     plt.xlabel("Number of features")
     plt.grid()
