@@ -3,6 +3,7 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.feature_selection import SelectKBest
 from sklearn.model_selection import KFold
+from sklearn.metrics import confusion_matrix
 
 import numpy as np
 from collections import Counter
@@ -49,13 +50,15 @@ def run_experiment(X, y, hidden_layer_size, n_features, n_runs=N_RUNS, algorithm
         experiment_bp.add_sample(
             Sample(np.mean(kfolds_bp_samples.scores),
                    np.mean(kfolds_bp_samples.fit_times),
-                   np.mean(kfolds_bp_samples.score_times)))
+                   np.mean(kfolds_bp_samples.score_times),
+                   kfolds_bp_samples.conf_matrices[0]))
 
         kfolds_elm_samples = kfolds_elm.samples()
         experiment_elm.add_sample(
             Sample(np.mean(kfolds_elm_samples.scores),
                    np.mean(kfolds_elm_samples.fit_times),
-                   np.mean(kfolds_elm_samples.score_times)))
+                   np.mean(kfolds_elm_samples.score_times),
+                   kfolds_elm_samples.conf_matrices[0]))
 
     return ExperimentOutput(experiment_bp.samples(),
                             experiment_elm.samples(),
@@ -73,17 +76,18 @@ def run_bp(X_train, y_train, X_test, y_test, algorithm, max_iter, alpha, hidden_
     '''
 
     clf = MLPClassifier(algorithm=algorithm, max_iter=max_iter, alpha=alpha, hidden_layer_sizes=hidden_layer_size,
-                        learning_rate=learning_rate, random_state=RANDOM_STATE)
+                        learning_rate=learning_rate, random_state=RANDOM_STATE, activation='logistic')
 
     fit_start_time = time()
     clf.fit(X_train, y_train)
     fit_time = time() - fit_start_time
-
+    conf_matrix = confusion_matrix(y_test, clf.predict(X_test))
     score_start_time = time()
     score = clf.score(X_test, y_test)
     score_time = time() - score_start_time
+    print(conf_matrix)
 
-    return Sample(score, fit_time, score_time)
+    return Sample(score, fit_time, score_time, conf_matrix)
 
 
 def run_elm(X_train, y_train, X_test, y_test, n_hidden, activation_func):
@@ -94,12 +98,15 @@ def run_elm(X_train, y_train, X_test, y_test, n_hidden, activation_func):
 
     elmc = ELMClassifier(n_hidden=n_hidden, activation_func=activation_func)
 
+
     fit_start_time = time()
     elmc.fit(X_train, y_train)
     fit_time = time() - fit_start_time
+
+    conf_matrix = confusion_matrix(elmc.predict(X_test), y_test)
 
     score_start_time = time()
     score = elmc.score(X_test, y_test)
     score_time = time() - score_start_time
 
-    return Sample(score, fit_time, score_time)
+    return Sample(score, fit_time, score_time, conf_matrix)

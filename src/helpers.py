@@ -1,19 +1,21 @@
 class Sample(object):
-    __slots__ = ["score", "fit_time", "score_time"]
+    __slots__ = ["score", "fit_time", "score_time", "conf_matrix"]
 
-    def __init__(self, score, fit_time, score_time):
+    def __init__(self, score, fit_time, score_time, conf_matrix):
         self.score = score
         self.fit_time = fit_time
         self.score_time = score_time
+        self.conf_matrix = conf_matrix
 
 
 class Samples(object):
-    __slots__ = ["scores", "fit_times", "score_times"]
+    __slots__ = ["scores", "fit_times", "score_times", "conf_matrices"]
 
-    def __init__(self, scores, fit_times, score_times):
+    def __init__(self, scores, fit_times, score_times, conf_matrices):
         self.scores = scores
         self.fit_times = fit_times
         self.score_times = score_times
+        self.conf_matrices = conf_matrices
 
     def __getitem__(self, key):
         if isinstance(key, str):
@@ -23,6 +25,8 @@ class Samples(object):
                 return self.fit_times
             elif key == "score_times":
                 return self.scores
+            elif key == "conf_matrices":
+                return self.conf_matrices
             else:
                 return None
 
@@ -52,11 +56,13 @@ class ExperimentWrapper(object):
         self.scores = []
         self.fit_times = []
         self.score_times = []
+        self.conf_matrices = []
 
     def add_sample(self, sample):
         self.scores.append(sample.score)
         self.fit_times.append(sample.fit_time)
         self.score_times.append(sample.score_time)
+        self.conf_matrices.append(sample.conf_matrix)
 
     def samples(self):
-        return Samples(self.scores, self.fit_times, self.score_times)
+        return Samples(self.scores, self.fit_times, self.score_times, self.conf_matrices)

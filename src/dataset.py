@@ -19,7 +19,7 @@ class DataSet:
         for sample in csv_reader:
             extracted_features = [float(i.replace(',', '.')) for i in sample[1:-1]]
             self._X.append(extracted_features)
-            extracted_class = str(sample[-1])
+            extracted_class = str(sample[-1])[1]
             self._y.append(extracted_class)
         self._check_features_sizes()
 

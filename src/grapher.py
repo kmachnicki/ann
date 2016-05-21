@@ -31,7 +31,7 @@ def plot(x, y, layer_size, n_features, alg_type, sample_type, ylabel):
     else:
         plt.title("Extreme learning machine, hidden layer size: " + str(layer_size))
     plt.xlim(1.0, n_features - 1)
-    plt.ylim(0.0, 1.0)
+    #plt.ylim(0.0, 1.0)
     plt.xticks(x, rotation="vertical")
     plt.yticks(np.arange(0.1, 1.0, 0.1))
     plt.ylabel(ylabel)
