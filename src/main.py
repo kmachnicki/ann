@@ -29,7 +29,7 @@ def main():
 
     print("\nNum of times features were selected: {}".format(final_counter))
 
-    generate_plots(experiment_results, ds.number_of_features)
+    generate_plots(experiment_results, ds.number_of_features, ds.col_names, final_counter)
 
 
 def print_result(result, layer_size, n_features):

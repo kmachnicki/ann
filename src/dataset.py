@@ -25,7 +25,7 @@ class DataSet:
 
     @staticmethod
     def _read_header(csv_reader):
-        return next(csv_reader)[1:]
+        return next(csv_reader)[1:-1]
 
     @property
     def X(self):
@@ -61,7 +61,7 @@ class DataSet:
                 if len(features) != prev_len:
                     raise RuntimeError("Rows sizes mismatch. Check your csv file.")
                 prev_len = len(features)
-            if len(self.X[0]) != len(self._column_names) - 1:
+            if len(self.X[0]) != len(self._column_names):
                 raise RuntimeError("Not all columns have names. Check your csv file.")
         elif any([self.X, self.y, self.col_names]):
             raise RuntimeError("Wrong initial data")
