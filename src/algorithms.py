@@ -81,11 +81,12 @@ def run_bp(X_train, y_train, X_test, y_test, algorithm, max_iter, alpha, hidden_
     fit_start_time = time()
     clf.fit(X_train, y_train)
     fit_time = time() - fit_start_time
+
     conf_matrix = confusion_matrix(y_test, clf.predict(X_test))
+
     score_start_time = time()
     score = clf.score(X_test, y_test)
     score_time = time() - score_start_time
-    print(conf_matrix)
 
     return Sample(score, fit_time, score_time, conf_matrix)
 
@@ -97,7 +98,6 @@ def run_elm(X_train, y_train, X_test, y_test, n_hidden, activation_func):
     '''
 
     elmc = ELMClassifier(n_hidden=n_hidden, activation_func=activation_func)
-
 
     fit_start_time = time()
     elmc.fit(X_train, y_train)
