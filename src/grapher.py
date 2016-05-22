@@ -16,12 +16,30 @@ def generate_plots(results, n_features, col_names, counter):
     ensure_dir(OUTPUT_IMAGES_DIR)
 
     draw_counter(col_names, counter)
+    draw_conf_matrix(results)
 
     x = range(1, n_features, 1)
     for layer_size in HIDDEN_LAYER_SIZES:
         draw_graphs(x, layer_size, results, n_features)
 
     plt.show()
+
+
+def draw_conf_matrix(results):
+    plt.figure(2)
+    for n_features, result in sorted(results[HIDDEN_LAYER_SIZES[0]].items()):
+        cm = result["bp"]["conf_matrices"]
+        plt.imshow(cm[0], interpolation="nearest", cmap=plt.cm.Blues)
+        plt.title("Confusion matrix")
+        plt.colorbar()
+        tick_marks = np.arange(len(cm[0]))
+        plt.xticks(tick_marks, ["G2", "G3"], rotation=45)
+        plt.yticks(tick_marks, ["G2", "G3"])
+        plt.tight_layout()
+        plt.ylabel("True label")
+        plt.xlabel("Predicted label")
+        plt.savefig(path.join(OUTPUT_IMAGES_DIR, "conf_matrix.pdf"))
+        return
 
 
 def draw_counter(col_names, counter):

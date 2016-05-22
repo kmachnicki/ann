@@ -103,7 +103,7 @@ def run_elm(X_train, y_train, X_test, y_test, n_hidden, activation_func):
     elmc.fit(X_train, y_train)
     fit_time = time() - fit_start_time
 
-    conf_matrix = confusion_matrix(elmc.predict(X_test), y_test)
+    conf_matrix = confusion_matrix(y_test, elmc.predict(X_test))
 
     score_start_time = time()
     score = elmc.score(X_test, y_test)

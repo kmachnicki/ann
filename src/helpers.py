@@ -76,7 +76,8 @@ class ExperimentWrapper(object):
         self.scores.append(sample.score)
         self.fit_times.append(sample.fit_time)
         self.score_times.append(sample.score_time)
-        self.conf_matrices.append(sample.conf_matrix)
+        if len(sample.conf_matrix) > 1:
+            self.conf_matrices.append(sample.conf_matrix)
 
     def samples(self):
         return Samples(self.scores, self.fit_times, self.score_times, self.conf_matrices)
