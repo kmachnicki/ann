@@ -2,6 +2,62 @@
 
 \section{Wykorzystane technologie}
 
-\section{Architektura aplikacji}
+Aplikacja implementująca sieci neuronowe na potrzeby realizacji tematu oraz wykonująca badania, zrealizowana została przy wykorzystaniu języka \texttt{Python} w wersji \texttt{3.5}.
+
+Głównym modułem, na którym oparto implementację, był \texttt{scikit-learn}. Wykorzystano go przede wszystkim do zbudowania sieci neuronowej uczoną metodą wstecznej propagacji błędu, a także skorzystano z wielu udostępnionych tam rozwiązań, jak na przykład walidacja krzyżowa i selekcja cech. Użyto modułu w wersji deweloperskiej \texttt{0.18.dev0}\footnote{http://scikit-learn.org/dev/documentation.html}, gdyż dopiero od tej wersji można tam korzystać z sieci neuronowych.
+
+Jako implementację drugiego badanego algorytmu - \textit{Extreme Learning Machines}, posłużył moduł \texttt{Python-ELM}\footnote{https://github.com/dclambert/Python-ELM}. Wyznaczony on był na oficjalnej stronie \textit{ELM}\footnote{http://www.ntu.edu.sg/home/egbhuang/elm\_codes.html} jako jedna z bazowych implementacji tegoż algorytmu. Udostępniony kod nie był, niestety, przystosowany do działania pod wersją \textit{Pythona 3}, na potrzeby projektu przerobiono więc kod tak, aby dało się go używać.
+
+Wszystkie wykorzystane moduły i ich przeznaczenie widnieją na poniższej tabeli:
+
+\begin{table}[h!]
+    \centering
+    \caption{Wykorzystane moduły.}
+    \begin{tabular}{p{3cm}p{2cm}p{11cm}}
+        \toprule
+        \textbf{Nazwa} & \textbf{Wersja} & \textbf{Opis} \\
+        \midrule
+        \texttt{scikit-learn} & 0.18 & sieć neuronowa uczona metodą wstecznej propagacji błędu, selekcja cech, walidacja krzyżowa, macierz błędu. \\
+        \texttt{Python-ELM} & 0.3 & \textit{Extreme Learning Machines}. \\
+        \texttt{numpy} & 1.11.0 & Obliczenia numeryczne. \\
+        \texttt{matplotlib} & 1.5.1 & Tworzenie wykresów. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\newpage
+
+\section{Opis implementacji}
+
+Na aplikację skłąda się kilka modułów:
+
+\begin{itemize}
+    \item \texttt{main.py} - główny moduł uruchamiający badania.
+    \item \texttt{algorithms.py} - uruchamia oba algorytmy.
+    \item \texttt{dataset.py} - importuje dane z pliku CSV.
+    \item \texttt{grapher.py} - tworzy wykresy z wyników badań.
+    \item \texttt{helper.py} - zawiera klasy pomocnicze do przechowywania danych.
+    \item \texttt{consts.py} - zawiera ustawienia badań i parametry dla algorytmów.
+\end{itemize}
 
 \section{Wdrożenie}
+
+W celu przygotowania aplikacji do działania, należy mając zainstalowaną wersję \texttt{Pythona 3.5} dodać katalog projektu do zmiennej środowiskowej \texttt{PYTHONPATH}. Aby tego dokonać, w katalogu projektu trzeba uruchomić komendę:
+
+\begin{verbatim}
+$ export PYTHONPATH="${PYTHONPATH}:${PWD}"
+\end{verbatim}
+
+Kolejnym krokiem jest uruchomienie skryptu instalacyjnego \texttt{install.sh}, który to zainstaluje wymagane pakiety z pliku \texttt{requirements.txt} oraz pobierze poprawiony moduł \texttt{Python-ELM} do katalogu \texttt{modules}:
+
+\begin{verbatim}
+./install.sh
+\end{verbatim}
+
+Teraz można uruchomić aplikację poprzez wywołanie skryptu głównego \texttt{main.py}:
+
+\begin{verbatim}
+python3 main.py
+\end{verbatim}
+
+Działanie aplikacji powinno się zakończyć wygenerowanymi wykresami.
