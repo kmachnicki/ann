@@ -1,9 +1,14 @@
 \chapter{Wstęp}
 \section{Cele i założenia projektowe}
 Celem projektu było zapoznanie się z tematem uczenia maszynowego, a konkretnie z sieciami neuronowymi.
-Realizacja projektu miała umożliwić zrozumienie zasady działania oraz porównanie wydajności sieci neuronowych używających propagacji wstecznej oraz wariantu o nazwie \textit{Extreme Learning Machines.}
+Realizacja projektu miała umożliwić zrozumienie zasady działania oraz porównanie wydajności sieci neuronowych używających propagacji wstecznej oraz wariantu o nazwie \textit{Extreme Learning Machines,} na podstawie analizy danych z badań cytologicznych.
 \section{Wstęp teoretyczny}
-Sieci neuronowe stanowią jedno z możliwych podejść do tematu uczenia maszynowego.
+Rozwój uczenia maszynowego w ostatnich latach jest bardzo ważny z punktu widzenia wielu dziedzin, jednak szczególnie ważny dla medycyny.
+
+Komputery stają się szybsze i są w stanie przetwarzać większe ilości danych, co przekłada się na możliwość użycia ich do analizowania np. wyników badań.
+Dzięki rozwojowi techniki, mogą one pomagać lekarzom w diagnozowaniu, co pozwala na szybsze decyzje na temat leczenia pacjenta.
+
+\textit{Sieci neuronowe} stanowią jedno z możliwych podejść do tematu uczenia maszynowego.
 Są one modelowane na podobieństwo neuronów w mózgu, a zastosowanie znajdują między innymi w problemach klasyfikacji -- np. klasyfikacji stopnia złośliwości raka, tak jak to miało miejsce w projekcie.
 
 Wzrost popularności zawdzięczają pojawieniu się szybszych komputerów oraz ogromnej ilości danych dostępnych do uczenia ich, co pozwoliło na zredukowanie wpływu głównych wad sieci neuronowych -- wolnego uczenia się oraz wymagania dużych zestawów danych uczących.
@@ -14,6 +19,10 @@ Prosta sieć neuronowa może być zbudowana z trzech warstw neuronów:
 	\item{warstwy neuronów ukrytych,}
 	\item{warstwy neuronów wyjściowych.}
 \end{itemize}
-Każda z warstw odbiera dane, a następnie po obliczeniu wartości funkcji aktywacji, przesyła dane do kolejnej warstwy.
-
-\includegraphics[scale=0.3]{img/model.png}
+Każda z warstw odbiera dane, a następnie po obliczeniu wartości funkcji aktywacji, przesyła je do kolejnej warstwy.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.4\linewidth]{img/model.png}
+	\label{Rysunek}
+	\caption{Schemat prostej sieci neuronowej. Źródło: wikipedia.org.}
+\end{figure}

@@ -42,19 +42,21 @@ Badania przeprowadzono dla 5 różnych liczb neuronów w warstwie ukrytej: 20, 3
 \end{figure}
 
 \section{Selekcja cech}
-
+Selekcja cech polega na wybieraniu podzbioru cech w celu ograniczenia czasu uczenia, uproszczenia modelu oraz minimalizacji zjawiska przeuczenia.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\linewidth]{img/features.pdf}
 	\label{Rysunek}
-	\caption{Selekcja cech po częstotliwości wybierania}
+	\caption{Częstość wybierania cech}
 \end{figure}
 
 \section{Macierz pomyłek}
+Macierz pomyłek umożliwia zobrazowanie jak dobrze klasyfikator radzi sobie ze swoim zadaniem.
 
+Dla problemu z dwiema klasami -- tak jak w aktualnie rozpatrywanym problemie -- macierz dzieli się na cztery części, w których zliczane są obiekty sklasyfikowane poprawnie -- umieszczone na przekątnej macierzy -- oraz błędnie -- umieszczone poza przekątną.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\linewidth]{img/conf_matrix.pdf}
 	\label{Rysunek}
-	\caption{Macierz pomyłek}
+	\caption{Przykładowa macierz pomyłek}
 \end{figure}
