@@ -43,6 +43,8 @@ Badania przeprowadzono dla 5 różnych liczb neuronów w warstwie ukrytej: 20, 3
 
 \section{Selekcja cech}
 Selekcja cech polega na wybieraniu podzbioru cech w celu ograniczenia czasu uczenia, uproszczenia modelu oraz minimalizacji zjawiska przeuczenia.
+
+W projekcie skorzystano z klasy \texttt{SelectKBest}, z modułu \texttt{sklearn.feature\_selection}.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\linewidth]{img/features.pdf}
@@ -54,6 +56,8 @@ Selekcja cech polega na wybieraniu podzbioru cech w celu ograniczenia czasu ucze
 Macierz pomyłek umożliwia zobrazowanie jak dobrze klasyfikator radzi sobie ze swoim zadaniem.
 
 Dla problemu z dwiema klasami -- tak jak w aktualnie rozpatrywanym problemie -- macierz dzieli się na cztery części, w których zliczane są obiekty sklasyfikowane poprawnie -- umieszczone na przekątnej macierzy -- oraz błędnie -- umieszczone poza przekątną.
+
+W projekcie skorzystano z funkcji \texttt{confusion\_matrix}, z modułu \texttt{sklearn.metrics}.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\linewidth]{img/conf_matrix.pdf}
