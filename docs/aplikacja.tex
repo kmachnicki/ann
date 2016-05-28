@@ -40,10 +40,10 @@ Na aplikację skłąda się kilka modułów:
     \item \texttt{consts.py} - zawiera ustawienia badań i parametry dla algorytmów.
 \end{itemize}
 
-Po uruchomieniu badania przez moduł \texttt{main.py}, w module \texttt{algorithms.py} odbywa się wykonywanie owych badań. Najpierw, na zbiorze zawierającym dane uczące \texttt{X} oraz tablicę wyników \texttt{y} wykonywana jest 10-krotna walidacja krzyżowa przy pomocy \texttt{KFold} z modułu \texttt{sklearn.model\_selection}, w wyniku której otrzymywane są indeksy elementów podzielonych na dwa podzbiory - zbiór uczący i testowy:
+Po uruchomieniu badania przez moduł \texttt{main.py}, w module \texttt{algorithms.py} odbywa się wykonywanie owych badań. Najpierw, na zbiorze zawierającym dane uczące \texttt{X} oraz tablicę wyników \texttt{y} wykonywana jest 10-krotna walidacja krzyżowa przy pomocy \texttt{StratifiedKFold} z modułu \texttt{sklearn.model\_selection}, w wyniku której otrzymywane są indeksy elementów podzielonych na dwa podzbiory - zbiór uczący i testowy:
 
 \begin{verbatim}
- KFold(n_folds=n_folds).split(X, y):
+ StratifiedKFold(n_folds=n_folds).split(X, y):
 \end{verbatim}
 
 W tym momencie następuje też iteracja przez wszystkie wyniki walidacji, gdzie w każdej iteracji odbywa się selekcja \texttt{n}-cech, gdzie \texttt{n} to liczba cech, dla której aktualnie wykonywane są badania:

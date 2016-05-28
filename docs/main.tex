@@ -31,6 +31,7 @@
 \usepackage{url}                        % generowanie linków ze znakami specjalnymi
 \usepackage{tikz}                       % modelowanie wykresów
 \usepackage{longtable}                  % rozkładanie tabel na kilka stron
+\usepackage{cite}                       % cytowanie
 
 %----------------------------------------------------------------------------------------
 %	PREAMBUŁA: DEFINICJE KOMEND
@@ -124,6 +125,8 @@
 
 \begin{document}
 
+\bibliographystyle{plabbrv}
+
 \maketitle
 \tableofcontents
 \newpage
@@ -132,5 +135,8 @@
 \input{aplikacja.tex}
 \input{badania.tex}
 \input{podsumowanie.tex}
+
+\nocite{*}
+\bibliography{bibliografia}
 
 \end{document}
