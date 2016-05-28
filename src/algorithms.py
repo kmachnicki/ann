@@ -2,7 +2,7 @@
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.feature_selection import SelectKBest
-from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix
 
 import numpy as np
@@ -30,7 +30,7 @@ def run_experiment(X, y, hidden_layer_size, n_features, n_runs=N_RUNS, algorithm
         kfolds_bp = ExperimentWrapper()
         kfolds_elm = ExperimentWrapper()
 
-        for train_set, test_set in KFold(n_folds=n_folds).split(X, y):
+        for train_set, test_set in StratifiedKFold(n_folds=n_folds).split(X, y):
             X_train, X_test, y_train, y_test = X[train_set], X[test_set], y[train_set], y[test_set]
             indices = get_selected_features_indices(X_train, y_train, k_best_features=n_features)
             X_train = [row[indices] for row in X_train]
