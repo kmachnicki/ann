@@ -33,13 +33,17 @@ def draw_conf_matrix(results):
         plt.title("Confusion matrix")
         plt.colorbar()
         tick_marks = np.arange(len(cm[0]))
-        plt.xticks(tick_marks, ["G2", "G3"], rotation=45)
+        plt.xticks(tick_marks, ["G2", "G3"])
         plt.yticks(tick_marks, ["G2", "G3"])
         plt.tight_layout()
         plt.ylabel("True label")
         plt.xlabel("Predicted label")
+        plt.text(0, 0, cm[0][0][0], fontsize=35)
+        plt.text(0, 1, cm[0][1][0], fontsize=35)
+        plt.text(1, 0, cm[0][0][1], fontsize=35)
+        plt.text(1, 1, cm[0][1][1], fontsize=35)
         plt.savefig(path.join(OUTPUT_IMAGES_DIR, "conf_matrix.pdf"))
-        return
+        return  # drawing only one random matrix
 
 
 def draw_counter(col_names, counter):
