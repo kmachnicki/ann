@@ -11,14 +11,14 @@ from time import time
 
 from modules.elm import ELMClassifier
 from src.consts import RANDOM_STATE, N_RUNS, K_BEST_FEATURES, N_FOLDS, BP_ALGORITHM, BP_MAX_ITER, BP_ALPHA,\
-    BP_LEARNING_RATE, ELM_ACTIVATION_FUNC
+    BP_LEARNING_RATE, BP_ACTIVATION_FUNC, ELM_ACTIVATION_FUNC
 from src.helpers import Sample, ExperimentOutput, ExperimentWrapper
 
 
 # sgd = stochastic gradient descent
 def run_experiment(X, y, hidden_layer_size, n_features, n_runs=N_RUNS, algorithm=BP_ALGORITHM,
                    max_iter=BP_MAX_ITER, alpha=BP_ALPHA, learning_rate=BP_LEARNING_RATE,
-                   n_folds=N_FOLDS, activation_func=ELM_ACTIVATION_FUNC):
+                   n_folds=N_FOLDS, elm_activation_func=ELM_ACTIVATION_FUNC, bp_activation_func=BP_ACTIVATION_FUNC):
     X = np.array(X)
     y = np.array(y)
 
@@ -40,11 +40,12 @@ def run_experiment(X, y, hidden_layer_size, n_features, n_runs=N_RUNS, algorithm
             kfolds_bp.add_sample(
                 run_bp(X_train, y_train, X_test, y_test,
                        algorithm=algorithm, max_iter=max_iter, alpha=alpha,
-                       learning_rate=learning_rate, hidden_layer_size=hidden_layer_size))
+                       learning_rate=learning_rate, hidden_layer_size=hidden_layer_size,
+                       activation_func=bp_activation_func))
 
             kfolds_elm.add_sample(
                 run_elm(X_train, y_train, X_test, y_test,
-                        n_hidden=hidden_layer_size, activation_func=activation_func))
+                        n_hidden=hidden_layer_size, activation_func=elm_activation_func))
 
         kfolds_bp_samples = kfolds_bp.samples()
         experiment_bp.add_sample(
@@ -69,14 +70,15 @@ def get_selected_features_indices(X, y, k_best_features=K_BEST_FEATURES):
     return SelectKBest(k=k_best_features).fit(X, y).get_support(indices=True)
 
 
-def run_bp(X_train, y_train, X_test, y_test, algorithm, max_iter, alpha, hidden_layer_size, learning_rate):
+def run_bp(X_train, y_train, X_test, y_test, algorithm, max_iter, alpha,
+           hidden_layer_size, learning_rate, activation_func):
 
     '''
     Back propagation algorithms for the single layer feedforward network (SLFN)
     '''
 
     clf = MLPClassifier(algorithm=algorithm, max_iter=max_iter, alpha=alpha, hidden_layer_sizes=hidden_layer_size,
-                        learning_rate=learning_rate, random_state=RANDOM_STATE, activation='logistic')
+                        learning_rate=learning_rate, random_state=RANDOM_STATE, activation=activation_func)
 
     fit_start_time = time()
     clf.fit(X_train, y_train)

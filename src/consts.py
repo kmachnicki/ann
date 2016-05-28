@@ -12,4 +12,5 @@ BP_ALGORITHM = "sgd"
 BP_MAX_ITER = 1000
 BP_ALPHA = 1e-6
 BP_LEARNING_RATE = "constant"
+BP_ACTIVATION_FUNC = "logistic"
 ELM_ACTIVATION_FUNC = "multiquadric"
