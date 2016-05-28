@@ -99,7 +99,7 @@ def run_elm(X_train, y_train, X_test, y_test, n_hidden, activation_func):
     Extreme learning machine algorithm for the single layer feedforward network (SLFN)
     '''
 
-    elmc = ELMClassifier(n_hidden=n_hidden, activation_func=activation_func)
+    elmc = ELMClassifier(n_hidden=n_hidden, activation_func=activation_func, random_state=RANDOM_STATE)
 
     fit_start_time = time()
     elmc.fit(X_train, y_train)
