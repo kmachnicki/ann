@@ -119,5 +119,11 @@ class GraphValuesWrapper(object):
         self.e_bp.append(np.std(results_bp))
         self.e_elm.append(np.std(results_elm))
 
+    def convert_s_to_ms(self):
+        self.y_bp = [val * 1000 for val in self.y_bp]
+        self.y_elm = [val * 1000 for val in self.y_elm]
+        self.e_bp = [val * 1000 for val in self.e_bp]
+        self.e_elm = [val * 1000 for val in self.e_elm]
+
     def values(self):
         return GraphValues(self.y_bp, self.y_elm, self.e_bp, self.e_elm)

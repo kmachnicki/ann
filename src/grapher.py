@@ -69,12 +69,15 @@ def draw_graphs(x, layer_size, results, n_features):
         fit_time_values.add_value(result["bp"]["fit_times"], result["elm"]["fit_times"])
         score_time_values.add_value(result["bp"]["score_times"], result["elm"]["score_times"])
 
-    plt.figure(layer_size)
-    plt.title("BP & ELM, hidden layer size: " + str(layer_size))
+    fit_time_values.convert_s_to_ms()
+    score_time_values.convert_s_to_ms()
+    f, (ax_score, ax_fit_times, ax_score_times) = plt.subplots(3, sharex=True)
+    ax_score.set_title("BP & ELM comparison, hidden layer size: " + str(layer_size))
+    plot(x, score_values.values(), n_features, "score", "Score", ax_score)
+    plot(x, fit_time_values.values(), n_features, "fit_time", "Fit time (ms)", ax_fit_times)
+    plot(x, score_time_values.values(), n_features, "score_time", "Score time (ms)", ax_score_times)
     plt.xlabel("Number of features")
-    plot(x, score_values.values(), n_features, "score", "Score", 311)
-    plot(x, fit_time_values.values(), n_features, "fit_time", "Fit time", 312)
-    plot(x, score_time_values.values(), n_features, "score_time", "Score time", 313)
+    f.subplots_adjust(hspace=0.15)
     plt.savefig(path.join(OUTPUT_IMAGES_DIR, "bp_elm_" + str(layer_size) + ".pdf"))
 
 
