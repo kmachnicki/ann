@@ -2,17 +2,27 @@
 
 \section{Wykorzystane technologie}
 
-Aplikacja implementująca sieci neuronowe na potrzeby realizacji tematu oraz wykonująca badania, zrealizowana została przy wykorzystaniu języka \texttt{Python} w wersji \texttt{3.5}.
+Aplikacja została stworzona przy wykorzystaniu języka \texttt{Python} w wersji \texttt{3.5}.
 
-Głównym modułem, na którym oparto implementację, był \texttt{scikit-learn}. Wykorzystano go przede wszystkim do zbudowania sieci neuronowej uczoną metodą wstecznej propagacji błędu, a także skorzystano z wielu udostępnionych tam rozwiązań, jak na przykład walidacja krzyżowa i selekcja cech. Użyto modułu w wersji deweloperskiej \texttt{0.18.dev0}\footnote{http://scikit-learn.org/dev/documentation.html}, gdyż dopiero od tej wersji można tam korzystać z sieci neuronowych.
+Biblioteka \texttt{scikit-learn} zawiera wiele narzędzi przydatnych w tematyce uczenia maszynowego, dlatego została wykorzystana w projekcie.
+Użyto biblioteki w wersji deweloperskiej -- \texttt{0.18.dev0}\footnote{http://scikit-learn.org/dev/documentation.html} -- ze względu na dostępność wymaganych narzędzi, m.in. funkcji służących do
+\begin{itemize}
+	\item{zbudowania klasyfikatora opartego o sieci neuronowe,}
+	\item{przeprowadzenia walidacji krzyżowej,}
+	\item{stworzenia rankingu cech,}
+	\item{stworzenia macierzy pomyłek.}
+\end{itemize}
 
-Jako implementację drugiego badanego algorytmu - \textit{Extreme Learning Machines}, posłużył moduł \texttt{Python-ELM}\footnote{https://github.com/dclambert/Python-ELM}. Wyznaczony on był na oficjalnej stronie \textit{ELM}\footnote{http://www.ntu.edu.sg/home/egbhuang/elm\_codes.html} jako jedna z bazowych implementacji tegoż algorytmu. Udostępniony kod nie był, niestety, przystosowany do działania pod wersją \textit{Pythona 3}, na potrzeby projektu przerobiono więc kod tak, aby dało się go używać.
+Ponieważ \texttt{scikit-learn} nie posiada zaimplementowanych \textit{Extreme Learning Machines,} w projekcie wykorzystano moduł \texttt{Python-ELM}\footnote{https://github.com/dclambert/Python-ELM}. 
+Wyznaczony on był na oficjalnej stronie \textit{ELM}\footnote{http://www.ntu.edu.sg/home/egbhuang/elm\_codes.html} jako jedna z bazowych implementacji.
+Udostępniony kod nie był przystosowany do działania pod wersją \textit{Pythona 3}, wymagał więc poprawek.
 
-Wszystkie wykorzystane moduły i ich przeznaczenie widnieją na poniższej tabeli:
+Wszystkie wykorzystane moduły i ich przeznaczenie widnieją w tabeli \ref{tab:usedmodules}.
 
 \begin{table}[h!]
     \centering
     \caption{Wykorzystane moduły.}
+    \label{tab:usedmodules}
     \begin{tabular}{p{3cm}p{2cm}p{11cm}}
         \toprule
         \textbf{Nazwa} & \textbf{Wersja} & \textbf{Opis} \\
@@ -27,65 +37,29 @@ Wszystkie wykorzystane moduły i ich przeznaczenie widnieją na poniższej tabel
 
 \newpage
 
-\section{Opis implementacji}
+\section{Budowa}
 
-Na aplikację skłąda się kilka modułów:
+Na aplikację składa się kilka modułów:
 
 \begin{itemize}
     \item \texttt{main.py} - główny moduł uruchamiający badania.
-    \item \texttt{algorithms.py} - uruchamia oba algorytmy.
-    \item \texttt{dataset.py} - importuje dane z pliku CSV.
+    \item \texttt{algorithms.py} - uruchamia eksperymenty.
+    \item \texttt{dataset.py} - importuje dane z pliku CSV i przechowuje je w wygodnej dla programisty postaci.
     \item \texttt{grapher.py} - tworzy wykresy z wyników badań.
     \item \texttt{helper.py} - zawiera klasy pomocnicze do przechowywania danych.
     \item \texttt{consts.py} - zawiera ustawienia badań i parametry dla algorytmów.
 \end{itemize}
 
-Po uruchomieniu badania przez moduł \texttt{main.py}, w module \texttt{algorithms.py} odbywa się wykonywanie owych badań. Najpierw, na zbiorze zawierającym dane uczące \texttt{X} oraz tablicę wyników \texttt{y} wykonywana jest 10-krotna walidacja krzyżowa przy pomocy \texttt{StratifiedKFold} z modułu \texttt{sklearn.model\_selection}, w wyniku której otrzymywane są indeksy elementów podzielonych na dwa podzbiory - zbiór uczący i testowy:
-
-\begin{verbatim}
- StratifiedKFold(n_folds=n_folds).split(X, y):
-\end{verbatim}
-
-W tym momencie następuje też iteracja przez wszystkie wyniki walidacji, gdzie w każdej iteracji odbywa się selekcja \texttt{n}-cech, gdzie \texttt{n} to liczba cech, dla której aktualnie wykonywane są badania:
-
-\begin{verbatim}
- SelectKBest(k=k_best_features).fit(X, y).get_support(indices=True)
-\end{verbatim}
-
-Na tak wyselekcjonowanych cechach odbywa się uruchomienie dwóch algorytmów - uczonego metodą wstecznej propagacji błędu (algorytm \textit{BP}) oraz jego szybka wersja losowa \textit{Extreme Learning Machines} (algorytm \textit{ELM}). Najpierw tworzona jest instancja klasyfikatora algorytmu \textit{BP} (opis parametrów użytych do badania znajduje się w rozdziale o badaniach), następnie odbywa się jego uczenie przekazując do funkcji \texttt{fit} zbiór uczący. Na końcu dokonywana jest klasyfikacja algorytmu przekazując do funkcji \texttt{score} zbiór testowy.
-
-\begin{verbatim}
- clf = MLPClassifier(...)
- clf.fit(X_train, y_train)
- score = clf.score(X_test, y_test)
-\end{verbatim}
-
-Dla algorytmu \texttt{ELM} procedura wygląda bardzo podobnie:
-
-\begin{verbatim}
- elmc = ELMClassifier(...)
- elmc.fit(X_train, y_train)
- score = elmc.score(X_test, y_test)
-\end{verbatim}
-
-\newpage
-
-Na końcu dla każdego algorytmu wyliczana jest macierz pomyłek, korzystając z \texttt{confusion\_matrix} z modułu \texttt{sklearn.metrics}.
-
-\begin{verbatim}
-conf_matrix = confusion_matrix(y_test, clf.predict(X_test))
-conf_matrix = confusion_matrix(y_test, elmc.predict(X_test))
-\end{verbatim}
-
+Funkcje oraz klasy z modułu \texttt{sklearn}, z których skorzystano w projekcie: \texttt{neural\_network.MLPClassifier}, \texttt{feature\_selection.SelectKBest}, \texttt{model\_selection.StratifiedKFold}, \texttt{metrics.confusion\_matrix}.
 \section{Wdrożenie}
 
-W celu przygotowania aplikacji do działania, należy mając zainstalowaną wersję \texttt{Pythona 3.5} dodać katalog projektu do zmiennej środowiskowej \texttt{PYTHONPATH}. Aby tego dokonać, w katalogu projektu trzeba uruchomić komendę:
+W celu przygotowania aplikacji do działania, należy dodać katalog projektu do zmiennej środowiskowej \texttt{PYTHONPATH}. Można to zrobić za pomocą polecenia:
 
 \begin{verbatim}
 $ export PYTHONPATH="${PYTHONPATH}:${PWD}"
 \end{verbatim}
 
-Kolejnym krokiem jest uruchomienie skryptu instalacyjnego \texttt{install.sh}, który to zainstaluje wymagane pakiety z pliku \texttt{requirements.txt} oraz pobierze poprawiony moduł \texttt{Python-ELM} do katalogu \texttt{modules}:
+Kolejnym krokiem jest uruchomienie skryptu instalacyjnego \texttt{install.sh}, który zainstaluje wymagane pakiety z pliku \texttt{requirements.txt} oraz pobierze poprawiony moduł \texttt{Python-ELM} do katalogu \texttt{modules}:
 
 \begin{verbatim}
 ./install.sh
@@ -97,4 +71,4 @@ Teraz można uruchomić aplikację poprzez wywołanie skryptu głównego \texttt
 python3 main.py
 \end{verbatim}
 
-Działanie aplikacji powinno się zakończyć wygenerowanymi wykresami.
+Działanie aplikacji powinno zakończyć się wygenerowaniem wykresów.
