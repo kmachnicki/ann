@@ -10,19 +10,8 @@ Dzięki rozwojowi techniki, mogą one pomagać lekarzom w diagnozowaniu, co pozw
 
 \textit{Sieci neuronowe} stanowią jedno z możliwych podejść do tematu uczenia maszynowego.
 Są one modelowane na podobieństwo neuronów w mózgu, a zastosowanie znajdują między innymi w problemach klasyfikacji -- np. klasyfikacji stopnia złośliwości raka, tak jak to miało miejsce w projekcie.
-
 Wzrost popularności zawdzięczają pojawieniu się szybszych komputerów oraz ogromnej ilości danych dostępnych do uczenia ich, co pozwoliło na zredukowanie wpływu głównych wad sieci neuronowych -- wolnego uczenia się oraz wymagania dużych zestawów danych uczących.
-\subsection{Budowa sieci neuronowych}
-Prosta sieć neuronowa może być zbudowana z trzech warstw neuronów:
-\begin{itemize}
-	\item{warstwy neuronów wejściowych,}
-	\item{warstwy neuronów ukrytych,}
-	\item{warstwy neuronów wyjściowych.}
-\end{itemize}
-Każda z warstw odbiera dane, a następnie po obliczeniu wartości funkcji aktywacji, przesyła je do kolejnej warstwy.
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.4\linewidth]{img/model.png}
-	\label{Rysunek}
-	\caption{Schemat prostej sieci neuronowej. Źródło: wikipedia.org.}
-\end{figure}
+
+Problem badany podczas projektu jest to problem klasyfikacji komórek rakowych. Jest on trudny, ponieważ jest problemem, który \textbf{nie jest zbalansowany} -- przypadki nowotworu złośliwego stanowią mniejszą część badanych. Wpływa to znacząco na proces uczenia się klasyfikatora i jakość klasyfikacji.
+
+Klasyfikator miał za zadanie nauczyć się rozpoznawać jedną z dwóch klas -- G2 oraz G3 -- z której każda odpowiada odpowiednio 6 i 7 oraz 8 i 9 punktom w systemie Scarffa-Blooma-Richardsona.
