@@ -2,11 +2,9 @@
 
 \section{Przeprowadzone badania}
 
-Zgodnie z założeniami, badania przeprowadzono dla 5 różnych liczb neuronów w warstwie ukrytej: \textbf{5, 10, 20, 40, 60}.
+Zgodnie z założeniami, badania przeprowadzono dla 5 różnych liczb neuronów w warstwie ukrytej: \textbf{5, 10, 20, 40, 60}. W celu uzyskania możliwie jak najdokładniejszych wyników, każdy eksperyment powtórzono 5 razy, zaś wyniki uśredniono i wraz z wyliczonym odchyleniem standardowym, zaprezentowano na wykresach. Pojedynczy eksperyment składa się z następujących kroków:
 
-Moduł główny (\texttt{main.py}), uruchamia eksperymenty zaimplementowane w \texttt{algorithms.py}.
-Pojedynczy eksperyment składa się z następujących kroków.
-\begin{enumerate}
+\begin{enumerate}[noitemsep]
 	\item{Wybranie rozmiaru warstwy ukrytej.}
 	\item{Wybranie liczby cech.}
 	\item{Przeprowadzenie 10-krotnej walidacji krzyżowej, na którą składa się}
@@ -24,9 +22,9 @@ Parametry, których użyto w badaniach znajdują się w tabeli \ref{tab:params}.
 
 \begin{table}[h!]
     \centering
-    \caption{Parametry algorytmu \texttt{BP}.}
+    \caption{Parametry algorytmów.}
     \label{tab:params}
-    \begin{tabular}{p{3cm}p{2cm}p{11cm}}
+    \begin{tabular}{p{3cm}p{3cm}p{9cm}}
         \toprule
         \textbf{Parametr} & \textbf{Wartość} & \textbf{Opis} \\
         \midrule
@@ -34,12 +32,11 @@ Parametry, których użyto w badaniach znajdują się w tabeli \ref{tab:params}.
         \texttt{max\_iter} & \texttt{10000} & Maksymalna liczba iteracji. \\
         \texttt{alpha} & \texttt{1e-6} & Parametr regularyzacji. \\
         \texttt{learning\_rate} & \texttt{constant} & Tempo uczenia. \\
-        \texttt{activation} & \texttt{logistic} & Funkcja aktywacji. \\
+        \texttt{activation} & \texttt{logistic} & Funkcja aktywacji algorytmu \texttt{BP}. \\
+        \texttt{activation} & \texttt{multiquadric} & Funkcja aktywacji algorytmu \texttt{ELM}. \\
         \bottomrule
     \end{tabular}
 \end{table}
-
-\newpage
 
 \section{Porównanie algorytmów}
 
@@ -52,7 +49,7 @@ Największą różnicę zauważyć jednak można w średnich czasach uczenia -- 
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.88\linewidth]{img/bp_elm_5.pdf}
+	\includegraphics[width=1.0\linewidth]{img/bp_elm_5.pdf}
 	\label{Rysunek}
 	\caption{5 neuronów w warstwie ukrytej - porównanie obu algorytmów}
 \end{figure}
@@ -63,7 +60,7 @@ Dla 10 neuronów w warstwie ukrytej zachodzą te same zależności. Widoczny jes
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.9\linewidth]{img/bp_elm_10.pdf}
+	\includegraphics[width=1.0\linewidth]{img/bp_elm_10.pdf}
 	\label{Rysunek}
 	\caption{10 neuronów w warstwie ukrytej - porównanie obu algorytmów}
 \end{figure}
@@ -74,7 +71,7 @@ Dla 20 neuronów w warstwie ukrytej zdecydowanie zauważyć już można tendencj
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.9\linewidth]{img/bp_elm_20.pdf}
+	\includegraphics[width=1.0\linewidth]{img/bp_elm_20.pdf}
 	\label{Rysunek}
 	\caption{20 neuronów w warstwie ukrytej - porównanie obu algorytmów}
 \end{figure}
@@ -100,24 +97,32 @@ Dla 40 oraz 60 neuronów w warstwie ukrytej widać już bardzo wyraźnie zauważ
 \newpage
 
 \section{Selekcja cech}
+
 Selekcja cech polega na wybieraniu podzbioru cech w celu ograniczenia czasu uczenia, uproszczenia modelu oraz minimalizacji zjawiska przeuczenia.
 
 W projekcie skorzystano z klasy \texttt{SelectKBest}, z modułu \texttt{sklearn.feature\_selection}.
+
+Wykres poniżej przedstawia sumę częstości wybierania cech na przestrzeni wszystkich eksperymentów. Widać wyraźnie, że niektóre cechy wybierane były znacznie częściej niż inne, co oznacza, że były o wiele bardziej przydatne w procesie uczenia algorytmów.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1.0\linewidth]{img/features.pdf}
-	\label{Rysunek}
+	\label{selekcja}
 	\caption{Częstość wybierania cech}
 \end{figure}
 
 \newpage
 
 \section{Macierz pomyłek}
+
 Macierz pomyłek umożliwia zobrazowanie jak dobrze klasyfikator radzi sobie ze swoim zadaniem.
 
 Dla problemu z dwiema klasami -- tak jak w aktualnie rozpatrywanym problemie -- macierz dzieli się na cztery części, w których zliczane są obiekty sklasyfikowane poprawnie -- umieszczone na przekątnej macierzy -- oraz błędnie -- umieszczone poza przekątną.
 
 W projekcie skorzystano z funkcji \texttt{confusion\_matrix}, z modułu \texttt{sklearn.metrics}.
+
+Na przedstawionym rysunku widać wyraźnie, że 14 z badanych obiektów zaklasyfikowanych zostało poprawnie do klasy \texttt{G2}. 4 z nich otrzymało błędną klasyfikację jako \texttt{G2}. Oznacza to, że w tym przypadku algorytm nauczył się klasyfikować wszystkie obiekty do klasy \texttt{G2}, co spowodowane było opisanym wyżej problemem niezbalansowanych danych.
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.8\linewidth]{img/conf_matrix.pdf}

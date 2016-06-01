@@ -17,6 +17,8 @@ Ponieważ \texttt{scikit-learn} nie posiada zaimplementowanych \textit{Extreme L
 Wyznaczony on był na oficjalnej stronie \textit{ELM}\footnote{http://www.ntu.edu.sg/home/egbhuang/elm\_codes.html} jako jedna z bazowych implementacji.
 Udostępniony kod nie był przystosowany do działania pod wersją \textit{Pythona 3}, wymagał więc poprawek.
 
+\newpage
+
 Wszystkie wykorzystane moduły i ich przeznaczenie widnieją w tabeli \ref{tab:usedmodules}.
 
 \begin{table}[h!]
@@ -35,8 +37,6 @@ Wszystkie wykorzystane moduły i ich przeznaczenie widnieją w tabeli \ref{tab:u
     \end{tabular}
 \end{table}
 
-\newpage
-
 \section{Budowa}
 
 Na aplikację składa się kilka modułów:
@@ -50,7 +50,41 @@ Na aplikację składa się kilka modułów:
     \item \texttt{consts.py} - zawiera ustawienia badań i parametry dla algorytmów.
 \end{itemize}
 
-Funkcje oraz klasy z modułu \texttt{sklearn}, z których skorzystano w projekcie: \texttt{neural\_network.MLPClassifier}, \texttt{feature\_selection.SelectKBest}, \texttt{model\_selection.StratifiedKFold}, \texttt{metrics.confusion\_matrix}.
+Po uruchomieniu badania przez moduł \texttt{main.py}, w module \texttt{algorithms.py} odbywa się wykonywanie owych badań. Najpierw, na zbiorze zawierającym dane uczące \texttt{X} oraz tablicę wyników \texttt{y} wykonywana jest 10-krotna walidacja krzyżowa przy pomocy \texttt{StratifiedKFold} z modułu \texttt{sklearn.model\_selection}, w wyniku której otrzymywane są indeksy elementów podzielonych na dwa podzbiory - zbiór uczący i testowy:
+
+\begin{verbatim}
+ StratifiedKFold(n_folds=n_folds).split(X, y):
+\end{verbatim}
+
+W tym momencie następuje też iteracja przez wszystkie wyniki walidacji, gdzie w każdej iteracji odbywa się selekcja \texttt{n}-cech, gdzie \texttt{n} to liczba cech, dla której aktualnie wykonywane są badania:
+
+\begin{verbatim}
+ SelectKBest(k=k_best_features).fit(X, y).get_support(indices=True)
+\end{verbatim}
+
+Na tak wyselekcjonowanych cechach odbywa się uruchomienie dwóch algorytmów - uczonego metodą wstecznej propagacji błędu (algorytm \textit{BP}) oraz jego szybka wersja losowa \textit{Extreme Learning Machines} (algorytm \textit{ELM}). Najpierw tworzona jest instancja klasyfikatora algorytmu \textit{BP} (opis parametrów użytych do badania znajduje się w rozdziale o badaniach), następnie odbywa się jego uczenie przekazując do funkcji \texttt{fit} zbiór uczący. Na końcu dokonywana jest klasyfikacja algorytmu przekazując do funkcji \texttt{score} zbiór testowy.
+
+\begin{verbatim}
+ clf = MLPClassifier(...)
+ clf.fit(X_train, y_train)
+ score = clf.score(X_test, y_test)
+\end{verbatim}
+
+Dla algorytmu \texttt{ELM} procedura wygląda bardzo podobnie:
+
+\begin{verbatim}
+ elmc = ELMClassifier(...)
+ elmc.fit(X_train, y_train)
+ score = elmc.score(X_test, y_test)
+\end{verbatim}
+
+Na końcu dla każdego algorytmu wyliczana jest macierz pomyłek, korzystając z \texttt{confusion\_matrix} z modułu \texttt{sklearn.metrics}.
+
+\begin{verbatim}
+conf_matrix = confusion_matrix(y_test, clf.predict(X_test))
+conf_matrix = confusion_matrix(y_test, elmc.predict(X_test))
+\end{verbatim}
+
 \section{Wdrożenie}
 
 W celu przygotowania aplikacji do działania, należy dodać katalog projektu do zmiennej środowiskowej \texttt{PYTHONPATH}. Można to zrobić za pomocą polecenia:
